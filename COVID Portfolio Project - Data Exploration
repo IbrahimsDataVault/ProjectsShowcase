@@ -1,0 +1,205 @@
+  --Covid deaths data (continent=null will have the continent in the location column)
+SELECT
+  *
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  continent IS NOT NULL
+ORDER BY
+  location,
+  date
+  -- SELECT *
+  -- FROM `sql-portfolio-project-375703.Portfolio_Project.Covid_Vaccinations`
+  -- ORDER BY location, date
+  -- Select data to use
+SELECT
+  location,
+  date,
+  total_cases,
+  new_cases,
+  total_deaths,
+  population
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+ORDER BY
+  location,
+  date
+  -- Compare the ratio of total cases with total deaths
+SELECT
+  location,
+  date,
+  total_cases,
+  total_deaths,
+  (total_deaths/total_cases) * 100 AS death_percent
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  location LIKE '%States%'
+  AND continent IS NOT NULL
+ORDER BY
+  location,
+  date
+  -- Compare total cases with total population
+SELECT
+  location,
+  date,
+  population,
+  total_cases,
+  (total_cases/population) * 100 AS infection_percent
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  location LIKE '%States%'
+  AND continent IS NOT NULL
+ORDER BY
+  location,
+  date
+  -- Countries with highest infection rate per population
+SELECT
+  location,
+  population,
+  MAX(total_cases) AS highest_infection_count,
+  MAX((total_cases/population)) * 100 AS infection_percent_per_population
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  continent IS NOT NULL
+GROUP BY
+  location,
+  population
+ORDER BY
+  infection_percent_per_population DESC
+  -- Countries with the highest death rate per population
+SELECT
+  location,
+  population,
+  MAX(CAST(total_deaths AS int)) AS highest_death_count,
+  MAX((total_deaths/population)) * 100 AS death_percent_per_population
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  continent IS NOT NULL
+GROUP BY
+  location,
+  population
+ORDER BY
+  highest_death_count DESC
+  -- Break things down by continent
+SELECT
+  continent,
+  MAX(CAST(total_deaths AS int)) AS highest_death_count,
+  MAX((total_deaths/population)) * 100 AS death_percent_per_population
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  continent IS NOT NULL
+  AND location NOT LIKE '%income%'
+GROUP BY
+  continent
+ORDER BY
+  highest_death_count DESC
+  -- Global numbers
+SELECT
+  --date,
+  SUM(new_cases) AS total_new_cases,
+  SUM(new_deaths) AS total_new_deaths,
+  (SUM(new_deaths)/SUM(new_cases)) * 100 AS death_percent
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  continent IS NOT NULL
+  --GROUP BY
+  -- date
+  --ORDER BY
+  --date
+  -- JOIN location, and date columns from the two tables
+  -- look at vaccinations to total population ratio
+SELECT
+  deaths.continent,
+  deaths.location,
+  deaths.date,
+  deaths.population,
+  vaccinations.new_vaccinations,
+  SUM(vaccinations.new_vaccinations) OVER (PARTITION BY deaths.location ORDER BY deaths.location, deaths.date) AS rolling_vaccination_count
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths ` AS deaths
+INNER JOIN
+  `sql-portfolio-project-375703.Portfolio_Project.Covid_Vaccinations` AS vaccinations
+ON
+  deaths.location = vaccinations.location
+  AND deaths.date = vaccinations.date
+WHERE
+  deaths.continent IS NOT NULL
+ORDER BY
+  2,
+  3
+  --Creating a common table expression (CTE)
+WITH
+  PopvsVac (Continent,
+    Location,
+    Date,
+    Population,
+    New_Vaccinations,
+    Rolling_vaccination_count) AS (
+  SELECT
+    deaths.continent,
+    deaths.location,
+    deaths.date,
+    deaths.population,
+    vaccinations.new_vaccinations,
+    SUM(CONVERT(int,
+        vacccinations.new_vaccinations)) OVER (PARTITION BY deaths.Location ORDER BY deaths.location, deaths.Date) AS rolling_vaccination_count
+    --, (RollingPeopleVaccinated/population)*100
+  FROM
+    `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths ` AS deaths
+  JOIN
+    `sql-portfolio-project-375703.Portfolio_Project.Covid_Vaccinations` AS vaccinations
+  ON
+    deaths.location = vaccinations.location
+    AND deaths.date = vaccinations.date
+  WHERE
+    deaths.continent IS NOT NULL
+    --order by 2,3
+    )
+SELECT
+  *,
+  (Rolling_vaccination_count/Population)*100
+FROM
+  PopvsVac
+  --Creating a Temp table
+CREATE TABLE
+  sql-portfolio-project-375703.Portfolio_Project.PercentPopulationVaccinated ( continent STRING,
+    location STRING,
+    date DATE,
+    population FLOAT64,
+    new_vaccinations FLOAT64,
+    rolling_vaccination_count FLOAT64 )
+  -- Inserting into the 'PercentPopulationVaccinated' Temp table
+INSERT INTO
+  sql-portfolio-project-375703.Portfolio_Project.PercentPopulationVaccinated (continent,
+    location,
+    date,
+    population,
+    new_vaccinations,
+    rolling_vaccination_count)
+SELECT
+  deaths.continent,
+  deaths.location,
+  deaths.date,
+  deaths.population,
+  vaccinations.new_vaccinations,
+  SUM(vaccinations.new_vaccinations) OVER (PARTITION BY deaths.location ORDER BY deaths.location, deaths.date) AS rolling_vaccination_count
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths ` AS deaths
+INNER JOIN
+  `sql-portfolio-project-375703.Portfolio_Project.Covid_Vaccinations` AS vaccinations
+ON
+  deaths.location = vaccinations.location
+  AND deaths.date = vaccinations.date
+WHERE
+  deaths.continent IS NOT NULL;
+SELECT
+  *,
+  (rolling_vaccination_count/population)*100
+FROM
+  sql-portfolio-project-375703.Portfolio_Project.PercentPopulationVaccinated
