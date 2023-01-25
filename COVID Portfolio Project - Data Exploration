@@ -11,6 +11,8 @@ ORDER BY
   -- SELECT *
   -- FROM `sql-portfolio-project-375703.Portfolio_Project.Covid_Vaccinations`
   -- ORDER BY location, date
+  
+  
   -- Select data to use
 SELECT
   location,
@@ -24,6 +26,8 @@ FROM
 ORDER BY
   location,
   date
+  
+  
   -- Compare the ratio of total cases with total deaths
 SELECT
   location,
@@ -39,6 +43,8 @@ WHERE
 ORDER BY
   location,
   date
+  
+  
   -- Compare total cases with total population
 SELECT
   location,
@@ -54,6 +60,8 @@ WHERE
 ORDER BY
   location,
   date
+  
+  
   -- Countries with highest infection rate per population
 SELECT
   location,
@@ -84,6 +92,8 @@ GROUP BY
   population
 ORDER BY
   highest_death_count DESC
+  
+  
   -- Break things down by continent
 SELECT
   continent,
@@ -98,6 +108,8 @@ GROUP BY
   continent
 ORDER BY
   highest_death_count DESC
+  
+  
   -- Global numbers
 SELECT
   --date,
@@ -112,6 +124,8 @@ WHERE
   -- date
   --ORDER BY
   --date
+  
+  
   -- JOIN location, and date columns from the two tables
   -- look at vaccinations to total population ratio
 SELECT
@@ -133,6 +147,8 @@ WHERE
 ORDER BY
   2,
   3
+  
+  
   --Creating a common table expression (CTE)
 WITH
   PopvsVac (Continent,
@@ -166,6 +182,8 @@ SELECT
   (Rolling_vaccination_count/Population)*100
 FROM
   PopvsVac
+  
+  
   --Creating a Temp table
 CREATE TABLE
   sql-portfolio-project-375703.Portfolio_Project.PercentPopulationVaccinated ( continent STRING,
@@ -174,6 +192,8 @@ CREATE TABLE
     population FLOAT64,
     new_vaccinations FLOAT64,
     rolling_vaccination_count FLOAT64 )
+    
+    
   -- Inserting into the 'PercentPopulationVaccinated' Temp table
 INSERT INTO
   sql-portfolio-project-375703.Portfolio_Project.PercentPopulationVaccinated (continent,
