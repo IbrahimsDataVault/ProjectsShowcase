@@ -24,8 +24,12 @@ In this case study, I analyzed data on COVID-19 infection rates and death counts
 https://ourworldindata.org/covid-deaths
 ## 
 ## Methods
+- SQL BigQuery was was used to query the data and derive 4 independent tables 
+- the 4 tables were analyzed and visualized using Tableau
 
 ### Data Cleaning
+#### Table 1: 
+Wrote a query to calculate the death percentage on the global scale by summing up all the 'new cases' column and 'new deaths' column from the entire world and then calculating the percentage of deaths from the cases. I specified ```WHERE continent IS NOT NULL``` because every country belongs to a continent, So by specifying ```WHERE continent IS NOT NULL``` will ensure that only the rows for the countries that have a continent specified will be included in the final results. This will give accurate results for the death percentage on the global scale as it will not consider the rows where the continent is not specified.
 ```sql
 --1. compare the overall deaths to cases ratio for the entire world
 SELECT 
@@ -41,6 +45,9 @@ ORDER BY
   ```
   <img width="440" alt="image" src="https://user-images.githubusercontent.com/123592482/215175883-5b0dafea-c691-4bb2-a4a9-3c111306ec8c.png">
 
+
+#### Table 2:
+Wrote a query to pull the total death count for each continent while filtering out specific values in the 'location' column ('income'(upper, middle, lower class), 'World', 'European Union' and 'International') that is displayed in the 'location' column. This query gives the total death count for continents and makes sure that the rows with 'income'(upper, middle, lower class), 'World', 'European Union' and 'International' are not considered in the final results.
  ```sql
  --2. Pull the 'total_death_count' for each continent in the location column while filtering out the income (upper, middle, lower class), World, European Union, and International rows that's displayed in the location column
 SELECT 
@@ -61,6 +68,8 @@ ORDER BY
   ```
  <img width="392" alt="image" src="https://user-images.githubusercontent.com/123592482/215176243-816edfcc-ea15-4618-a70c-10c0e62e9ab3.png">
 
+#### Table 3:
+Wrote a query to pull the data for the countries with the highest infection rate per population. I then computed the infection percent per population by dividing the total cases by population and multiplying the result by 100. It filters the rows where the location contains 'income' and groups the results by location and population and orders the results by the highest infection percent per population.
  ```sql 
  --3. Countries with highest infection rate per population
 SELECT
@@ -80,6 +89,8 @@ ORDER BY
  ```
  <img width="966" alt="image" src="https://user-images.githubusercontent.com/123592482/215180014-8f896c9e-4fca-422b-bee4-74b546f04b86.png">
 
+ #### Table 4:
+This last query is similiar to the previous one but it also includes the 'date' column in the SELECT statement and in the GROUP BY clause. It is pulling the data for the countries with the highest infection rate per population grouped by date. It is computing the infection percent per population by dividing the total cases by population and multiplying the result by 100. It filters the rows where the location contains 'income' and groups the results by location, population, and date and orders the results by the highest infection percent per population.
  ```sql
  --4. Countries with highest infection rate per population grouped by date 
 SELECT
@@ -102,16 +113,16 @@ ORDER BY
  <img width="962" alt="image" src="https://user-images.githubusercontent.com/123592482/215180802-b08918ea-6131-4fa0-b4d2-3e5701a48061.png">
  
 ### Data Analysis 
-1. 
+#### Table 1: 
 <img width="587" alt="image" src="https://user-images.githubusercontent.com/123592482/215181074-97858872-e6a1-4004-b226-37380a4d6f1e.png">
 
-2. 
+#### Table 2: 
 <img width="890" alt="image" src="https://user-images.githubusercontent.com/123592482/215181305-d95887f1-c75f-44b0-aa99-ad10a8a75c9d.png">
 
-3. 
+#### Table 3: 
 <img width="865" alt="image" src="https://user-images.githubusercontent.com/123592482/215181878-d978f91d-ac59-4bc3-9b3e-7932a9b491bc.png">
 
-4. 
+#### Table 4
 <img width="995" alt="image" src="https://user-images.githubusercontent.com/123592482/215182431-08da3d59-5c8d-4aa3-b686-54720e72c263.png">
 
 ## Solutions
