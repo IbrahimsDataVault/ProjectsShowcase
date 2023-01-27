@@ -1,4 +1,4 @@
- ```sql
+ sql
  --Covid deaths data (continent=null will have the continent in the location column; including Canada as part of North America, wheras CANADA is a seperate 'continent' in the continent column-- not correct)
 SELECT
   *
@@ -262,4 +262,4 @@ SELECT
 FROM
   sql-portfolio-project-375703.Portfolio_Project.PercentPopulationVaccinated
 
-```
+
