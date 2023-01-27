@@ -21,7 +21,8 @@
 In this case study, I analyzed data on COVID-19 infection rates and death counts. The goal of this analysis is to understand the spread of the virus and identify any patterns or trends that can help inform policy decisions. The data will be cleaned and organized in SQL, and then visualized using Tableau to gain insights.
 
 ## Data Source 
-
+https://ourworldindata.org/covid-deaths
+## 
 ## Methods
 
 ### Data Cleaning
