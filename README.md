@@ -127,7 +127,7 @@ ORDER BY
 ## Conclusion
 Key findings from the dashboard until the date of knowledge cutoff (Jan 2023) show that about 1 percent of the world's population who have been infected with COVID-19 have died, and Europe leads the world with the highest infection death count and infection rate in the world. This information can be used by policymakers and healthcare professionals to make informed decisions about how to respond to the pandemic. I will continue to update the dashboard and case study to reflect the most current data and insights. The goal of this analysis is to help stakeholders understand the spread of the virus and take action to slow its spread and save lives.
 
-## Solutions & Next Steps 
+## Solutions & Next Steps
 Based on the data findings vizualized by the Tableau Dashboard, here are 5 solutions that can be proposed to address the COVID-19 pandemic: 
 1. Increased Vaccination Efforts in Europe: Europe has the highest death count among the continents, and many countries in Europe have high infection rates. By increasing vaccination efforts in Europe, we can protect the population and potentially reduce the death count.
 2. Targeted Testing and Contact Tracing in High-Risk Countries: Cyprus and South Korea have some of the highest infection rates in the world. By targeting testing and contact tracing efforts in these countries, we can identify and isolate infected individuals more effectively, slowing the spread of the virus.
