@@ -1,4 +1,5 @@
-  --Covid deaths data (continent=null will have the continent in the location column)
+ ```sql
+ --Covid deaths data (continent=null will have the continent in the location column; including Canada as part of North America, wheras CANADA is a seperate 'continent' in the continent column-- not correct)
 SELECT
   *
 FROM
@@ -11,8 +12,6 @@ ORDER BY
   -- SELECT *
   -- FROM `sql-portfolio-project-375703.Portfolio_Project.Covid_Vaccinations`
   -- ORDER BY location, date
-  
-  
   -- Select data to use
 SELECT
   location,
@@ -26,9 +25,7 @@ FROM
 ORDER BY
   location,
   date
-  
-  
-  -- Compare the ratio of total cases with total deaths
+  -- Compare the ratio of total cases with total deaths for each country
 SELECT
   location,
   date,
@@ -43,26 +40,56 @@ WHERE
 ORDER BY
   location,
   date
-  
-  
+
+
+--1. compare the overall deaths to cases ratio for the entire world
+SELECT 
+  SUM(new_cases) as total_cases,
+  SUM(new_deaths) as total_deaths,
+  (SUM(new_deaths)/SUM(new_cases))*100 AS death_percentage
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE 
+  continent IS NOT NULL
+ORDER BY
+  1,2
+
+
+--2. Pull the 'total_death_count' for each continent in the location column while filtering out the income (upper, middle, lower class), World, European Union, and International rows that's displayed in the location column
+SELECT 
+  location,
+  SUM(new_deaths) AS total_death_count
+FROM 
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  continent IS NULL AND 
+  location NOT LIKE '%income%' AND 
+  location NOT LIKE '%World%' AND
+  location NOT LIKE '%European Union%' AND
+  location NOT LIKE '%International%' 
+GROUP BY
+  location
+ORDER BY 
+  total_death_count DESC
+
   -- Compare total cases with total population
 SELECT
   location,
-  date,
   population,
+  date,
   total_cases,
   (total_cases/population) * 100 AS infection_percent
 FROM
   `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
-WHERE
-  location LIKE '%States%'
-  AND continent IS NOT NULL
+--WHERE
+ -- location LIKE '%States%'
+  --AND continent IS NOT NULL
 ORDER BY
   location,
   date
-  
-  
-  -- Countries with highest infection rate per population
+
+
+--3. Countries with highest infection rate per population
 SELECT
   location,
   population,
@@ -71,12 +98,33 @@ SELECT
 FROM
   `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
 WHERE
-  continent IS NOT NULL
+  location NOT LIKE '%income%'
 GROUP BY
   location,
   population
 ORDER BY
   infection_percent_per_population DESC
+
+
+--4. Countries with highest infection rate per population grouped by date 
+SELECT
+  location,
+  population,
+  date,
+  MAX(total_cases) AS highest_infection_count,
+  MAX((total_cases/population)) * 100 AS infection_percent_per_population
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  location NOT LIKE '%income%'
+GROUP BY
+  location,
+  population,
+  date
+ORDER BY
+  infection_percent_per_population DESC
+
+
   -- Countries with the highest death rate per population
 SELECT
   location,
@@ -92,8 +140,6 @@ GROUP BY
   population
 ORDER BY
   highest_death_count DESC
-  
-  
   -- Break things down by continent
 SELECT
   continent,
@@ -108,8 +154,6 @@ GROUP BY
   continent
 ORDER BY
   highest_death_count DESC
-  
-  
   -- Global numbers
 SELECT
   --date,
@@ -124,8 +168,6 @@ WHERE
   -- date
   --ORDER BY
   --date
-  
-  
   -- JOIN location, and date columns from the two tables
   -- look at vaccinations to total population ratio
 SELECT
@@ -147,9 +189,9 @@ WHERE
 ORDER BY
   2,
   3
-  
-  
-  --Creating a common table expression (CTE)
+
+
+--Creating a common table expression (CTE)
 WITH
   PopvsVac (Continent,
     Location,
@@ -182,8 +224,6 @@ SELECT
   (Rolling_vaccination_count/Population)*100
 FROM
   PopvsVac
-  
-  
   --Creating a Temp table
 CREATE TABLE
   sql-portfolio-project-375703.Portfolio_Project.PercentPopulationVaccinated ( continent STRING,
@@ -192,8 +232,6 @@ CREATE TABLE
     population FLOAT64,
     new_vaccinations FLOAT64,
     rolling_vaccination_count FLOAT64 )
-    
-    
   -- Inserting into the 'PercentPopulationVaccinated' Temp table
 INSERT INTO
   sql-portfolio-project-375703.Portfolio_Project.PercentPopulationVaccinated (continent,
@@ -223,3 +261,5 @@ SELECT
   (rolling_vaccination_count/population)*100
 FROM
   sql-portfolio-project-375703.Portfolio_Project.PercentPopulationVaccinated
+
+```
