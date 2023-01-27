@@ -12,7 +12,7 @@
 - [Data Source](#Data-Source)
 - [Methods](#Methods)
   - [Data Cleaning](#Data-Cleaning)
-  - [Data Analysis](#Data-Analysis)
+  - [Data Visualization](#Data-Visualization)
 - [Solutions](#Solutions)
 - [Conclusion](#Conclusion) 
 - [Next Steps](#Next-Steps) 
@@ -112,7 +112,7 @@ ORDER BY
  ```
  <img width="962" alt="image" src="https://user-images.githubusercontent.com/123592482/215180802-b08918ea-6131-4fa0-b4d2-3e5701a48061.png">
  
-### Data Analysis 
+### Data Visualization 
 #### Table 1: 
 <img width="587" alt="image" src="https://user-images.githubusercontent.com/123592482/215181074-97858872-e6a1-4004-b226-37380a4d6f1e.png">
 
