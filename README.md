@@ -26,8 +26,93 @@ https://ourworldindata.org/covid-deaths
 ## Methods
 
 ### Data Cleaning
+```sql
+--1. compare the overall deaths to cases ratio for the entire world
+SELECT 
+  SUM(new_cases) as total_cases,
+  SUM(new_deaths) as total_deaths,
+  (SUM(new_deaths)/SUM(new_cases))*100 AS death_percentage
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE 
+  continent IS NOT NULL
+ORDER BY
+  1,2
+  ```
+  <img width="440" alt="image" src="https://user-images.githubusercontent.com/123592482/215175883-5b0dafea-c691-4bb2-a4a9-3c111306ec8c.png">
 
+ ```sql
+ --2. Pull the 'total_death_count' for each continent in the location column while filtering out the income (upper, middle, lower class), World, European Union, and International rows that's displayed in the location column
+SELECT 
+  location,
+  SUM(new_deaths) AS total_death_count
+FROM 
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  continent IS NULL AND 
+  location NOT LIKE '%income%' AND 
+  location NOT LIKE '%World%' AND
+  location NOT LIKE '%European Union%' AND
+  location NOT LIKE '%International%' 
+GROUP BY
+  location
+ORDER BY 
+  total_death_count DESC
+  ```
+ <img width="392" alt="image" src="https://user-images.githubusercontent.com/123592482/215176243-816edfcc-ea15-4618-a70c-10c0e62e9ab3.png">
+
+ ```sql 
+ --3. Countries with highest infection rate per population
+SELECT
+  location,
+  population,
+  MAX(total_cases) AS highest_infection_count,
+  MAX((total_cases/population)) * 100 AS infection_percent_per_population
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  location NOT LIKE '%income%'
+GROUP BY
+  location,
+  population
+ORDER BY
+  infection_percent_per_population DESC
+ ```
+ <img width="966" alt="image" src="https://user-images.githubusercontent.com/123592482/215180014-8f896c9e-4fca-422b-bee4-74b546f04b86.png">
+
+ ```sql
+ --4. Countries with highest infection rate per population grouped by date 
+SELECT
+  location,
+  population,
+  date,
+  MAX(total_cases) AS highest_infection_count,
+  MAX((total_cases/population)) * 100 AS infection_percent_per_population
+FROM
+  `sql-portfolio-project-375703.Portfolio_Project.Covid Deaths `
+WHERE
+  location NOT LIKE '%income%'
+GROUP BY
+  location,
+  population,
+  date
+ORDER BY
+  infection_percent_per_population DESC
+ ```
+ <img width="962" alt="image" src="https://user-images.githubusercontent.com/123592482/215180802-b08918ea-6131-4fa0-b4d2-3e5701a48061.png">
+ 
 ### Data Analysis 
+1. 
+<img width="587" alt="image" src="https://user-images.githubusercontent.com/123592482/215181074-97858872-e6a1-4004-b226-37380a4d6f1e.png">
+
+2. 
+<img width="890" alt="image" src="https://user-images.githubusercontent.com/123592482/215181305-d95887f1-c75f-44b0-aa99-ad10a8a75c9d.png">
+
+3. 
+<img width="865" alt="image" src="https://user-images.githubusercontent.com/123592482/215181878-d978f91d-ac59-4bc3-9b3e-7932a9b491bc.png">
+
+4. 
+<img width="995" alt="image" src="https://user-images.githubusercontent.com/123592482/215182431-08da3d59-5c8d-4aa3-b686-54720e72c263.png">
 
 ## Solutions
 
