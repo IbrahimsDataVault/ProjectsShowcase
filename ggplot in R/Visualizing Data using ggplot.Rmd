@@ -1,0 +1,220 @@
+---
+title: "Visualizing Data with ggplot"
+author: "Ibrahim I."
+date: "2023-01-22"
+output:
+  html_document: default
+  theme: cerulean
+  toc: yes
+  toc_depth: 3
+  toc_float: yes
+---
+# Visualizing Data With ggplot
+## 1. Install & load the desired packages & data
+```{r loading packages, echo=TRUE, warning=FALSE}
+library("ggplot2")
+library("palmerpenguins")
+```
+## 2. View the data that will be visualized
+```{r penguins data, echo=TRUE, warning=FALSE}
+data("penguins")
+View(penguins)
+```
+#### *an example of a really cool plot to see
+![**can also add captions to the plot --'soooo cool'**](https://gganimate.com/reference/figures/README-unnamed-chunk-4-1.gif)
+
+## 3. Making a scatterplot with the Penguins dataset plotting flipper length with body mass
+```{r warning=FALSE}
+ ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g))
+```
+
+#### Another syntax for the same plot
+```{r warning=FALSE}
+ggplot(data = penguins, mapping = aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point()
+```
+
+
+## 3. Different aesthetics for the penguins plot
+### 3a. 
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, shape = species))
+```
+
+### 3b.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, shape = species, color = species))
+```
+
+### 3c. 
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, shape = species, color = species, size = species))
+```
+
+### 3d.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, alpha = species))
+```
+
+### 3e.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g), color = "purple")
+```
+
+### 3f.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_smooth(mapping = aes(x = flipper_length_mm, y = body_mass_g))
+```
+
+### 3g.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_smooth(mapping = aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g))
+```
+
+### 3h.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_smooth(mapping = aes(x = flipper_length_mm, y = body_mass_g, linetype = species))
+```
+
+### 3i.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_jitter(mapping = aes(x = flipper_length_mm, y = body_mass_g))
+```
+
+## 2. using the facet_grid() to seperate the plots by sex and species subsets 
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  facet_grid(sex ~ species)
+```
+
+
+# Loading & viewing the diamonds dataset 
+```{r eval=FALSE, warning=FALSE, include=FALSE}
+data("diamonds")
+View(diamonds)
+```
+
+## 1. Visualizing the diamonds dataset using a bar graph with different aesthetics
+```{r warning=FALSE}
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut))
+```
+
+### 1a.
+```{r warning=FALSE}
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut, color = cut))
+```
+
+### 1b.
+```{r warning=FALSE}
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut, fill = cut))
+```
+
+### 1c.
+```{r warning=FALSE}
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = cut, fill = clarity))
+```
+
+### 1d.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  facet_wrap(~species)
+```
+
+### 1e.
+```{r warning=FALSE}
+ggplot(data = diamonds) +
+  geom_bar(mapping = aes(x = color, fill = cut)) +
+  facet_wrap(~cut)
+```
+
+
+
+# Adding labels and annotations to the penguins dataset plots 
+
+## 1. 
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  labs(title = "Palmer Penguins: Body Mass vs. Flipper Length")
+```
+
+## 2. 
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  labs(title = "Palmer Penguins: Body Mass vs. Flipper Length", subtitle = "Sample of Three Penguins Species")
+```
+
+## 3.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  labs(title = "Palmer Penguins: Body Mass vs. Flipper Length", subtitle = "Sample of Three Penguins Species", caption = "Data collected by Dr. Kristen Gorman")
+```
+
+## 4.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  labs(title = "Palmer Penguins: Body Mass vs. Flipper Length", subtitle = "Sample of Three Penguins Species", caption = "Data collected by Dr. Kristen Gorman") + 
+  annotate("text",x=220, y=3500, label= "The Gentoos are the largest" )
+```
+
+## 5.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  labs(title = "Palmer Penguins: Body Mass vs. Flipper Length", subtitle = "Sample of Three Penguins Species", caption = "Data collected by Dr. Kristen Gorman") + 
+  annotate("text",x=220, y=3500, label= "The Gentoos are the largest", color="purple" )
+```
+
+## 6.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  labs(title = "Palmer Penguins: Body Mass vs. Flipper Length", subtitle = "Sample of Three Penguins Species", caption = "Data collected by Dr. Kristen Gorman") + 
+  annotate("text",x=220, y=3500, label= "The Gentoos are the largest", color="purple", fontface="bold", size=4.5 )
+```
+
+## 7.
+```{r warning=FALSE}
+ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  labs(title = "Palmer Penguins: Body Mass vs. Flipper Length", subtitle = "Sample of Three Penguins Species", caption = "Data collected by Dr. Kristen Gorman") + 
+  annotate("text",x=220, y=3500, label= "The Gentoos are the largest", color="purple", fontface="bold", size=4.5, angle=25 )
+```
+
+
+## 8.
+```{r warning=FALSE}
+p <- ggplot(data = penguins) +
+  geom_point(mapping = aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  labs(title = "Palmer Penguins: Body Mass vs. Flipper Length", subtitle = "Sample of Three Penguins Species", caption = "Data collected by Dr. Kristen Gorman") 
+```
+
+## 9.
+```{r warning=FALSE}
+p + annotate("text",x=220, y=3500, label= "The Gentoos are the largest", color="purple", fontface="bold", size=4.5, angle=25 )
+```
+  
+
+
+#### Thank you for reading, Ibrahim
+
